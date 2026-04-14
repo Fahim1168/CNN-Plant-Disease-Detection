@@ -200,3 +200,19 @@ for epoch in range(epochs):
     avg_loss = total_loss / len(train_loader)
     print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.4f}")
 
+# Evaluation Function
+
+def evaluate(loader):
+    model.eval()
+    total, correct = 0, 0
+    with torch.no_grad():
+        for batch_features, batch_labels in loader:
+            batch_features, batch_labels = batch_features.to(device), batch_labels.to(device)
+            outputs = model(batch_features)
+            _, predicted = torch.max(outputs, 1)
+            total += batch_labels.size(0)
+            correct += (predicted == batch_labels).sum().item()
+    return correct / total
+
+test_acc = evaluate(test_loader)
+print("Test Accuracy:", test_acc)
